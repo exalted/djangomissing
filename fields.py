@@ -6,15 +6,13 @@ from django.utils.translation import ugettext as _
 from django.db import models
 from django.conf import settings
 
-try:
-    from south.modelsinspector import add_introspection_rules
-    _using_south = 'south' in settings.INSTALLED_APPS
-    # If not using South we won't need this
-    if not _using_south:
-        del add_introspection_rules
-except ImportError:
-    # Don't complain if South is not available
-    _using_south = False
+_using_south = 'south' in settings.INSTALLED_APPS
+if _using_south:
+    try:
+        from south.modelsinspector import add_introspection_rules
+    except ImportError:
+        # Don't complain if South is not available
+        _using_south = False
 
 # Codes for the Representation of Names of Languages
 # (Ref.: http://www.loc.gov/standards/iso639-2/php/code_list.php
