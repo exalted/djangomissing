@@ -491,7 +491,7 @@ class LanguageField(models.CharField):
         return 'CharField'
 
 if _using_south:
-    add_introspection_rules([], ['^trango_missing\.fields\.LanguageField'])
+    add_introspection_rules([], ['^djangomissing\.fields\.LanguageField'])
 
 
 class CountryField(models.CharField):
@@ -509,6 +509,6 @@ class CountryField(models.CharField):
         return 'CharField'
 
 if _using_south:
-    add_introspection_rules([], ['^trango_missing\.fields\.CountryField'])
+    add_introspection_rules([], ['^djangomissing\.fields\.CountryField'])
 
 # End of file

@@ -1,7 +1,8 @@
-Trango Missing
-==============
+Django Missing (djangomissing)
+==============================
 
-This Django application holds whatever we found that is missing in Django core.
+Whatever I think is missing in Django core.
+
 
 Features
 --------
@@ -9,24 +10,47 @@ Features
 * `LanguageField` -- Stores language codes as defined by ISO 639-1
 * `CountryField` -- Stores language codes as defined by ISO 3166-1-alpha-2
 
+
 Installation
 ------------
 
-Download and copy trango-missing files into a new directory called
-*trango_missing* to your django project or place it on your PYTHONPATH.
+Place *djangomissing* app on your PYTHONPATH or add it to your django project.
+
 
 Usage
 -----
 
 Just import new fields as:
 
-    from trango_missing.fields import *
+    from djangomissing.fields import *
 
 Then you can use'em in your models like:
 
     class Foo(models.Model):
+        name = models.CharField(max_length=100)
         language = LanguageField()
         country = CountryField(blank=True)
+
+        class Meta:
+            unique_together = ('name', 'language', 'country')
+
+        def __unicode__(self):
+            len_max = 50
+            return '%(name)s (%(locale_name)s)' % {
+                'name': '%s%s' % (
+                    self.name[:len_max],
+                    '...' if len(self.name) > len_max else '',
+                ),
+                'locale_name': self.locale_name
+            }
+
+        @property
+        def locale_name(self):
+            return '%(ll)s%(_CC)s' % {
+                'll': self.language,
+                '_CC': ('_' + self.country.upper()) if self.country else ''
+            }
+
 
 Notes
 -----
@@ -40,5 +64,5 @@ or
 
     django-admin.py makemessages -l <ll>_<CC>
 
-No worries if you either don't use South or don't know what that is, our code
-will gracefully handle those cases and won't enable this feature.
+No worries if you either don't use South [http://south.aeracode.org/] or
+don't know what that is, in that case feature won't be get on your way.
