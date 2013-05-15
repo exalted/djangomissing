@@ -1,5 +1,5 @@
-Django Missing (djangomissing)
-==============================
+Django Missing
+==============
 
 Whatever I think is missing in Django core.
 
@@ -22,34 +22,38 @@ Usage
 
 Just import new fields as:
 
-    from djangomissing.fields import *
+```python
+from djangomissing.fields import *
+```
 
 Then you can use'em in your models like:
 
-    class Foo(models.Model):
-        name = models.CharField(max_length=100)
-        language = LanguageField()
-        country = CountryField(blank=True)
+```python
+class Foo(models.Model):
+    name = models.CharField(max_length=100)
+    language = LanguageField()
+    country = CountryField(blank=True)
 
-        class Meta:
-            unique_together = ('name', 'language', 'country')
+    class Meta:
+        unique_together = ('name', 'language', 'country')
 
-        def __unicode__(self):
-            len_max = 50
-            return '%(name)s (%(locale_name)s)' % {
-                'name': '%s%s' % (
-                    self.name[:len_max],
-                    '...' if len(self.name) > len_max else '',
-                ),
-                'locale_name': self.locale_name
-            }
+    def __unicode__(self):
+        len_max = 50
+        return '%(name)s (%(locale_name)s)' % {
+            'name': '%s%s' % (
+                self.name[:len_max],
+                '...' if len(self.name) > len_max else '',
+            ),
+            'locale_name': self.locale_name
+        }
 
-        @property
-        def locale_name(self):
-            return '%(ll)s%(_CC)s' % {
-                'll': self.language,
-                '_CC': ('_' + self.country.upper()) if self.country else ''
-            }
+    @property
+    def locale_name(self):
+        return '%(ll)s%(_CC)s' % {
+            'll': self.language,
+            '_CC': ('_' + self.country.upper()) if self.country else ''
+        }
+```
 
 
 Notes
@@ -58,11 +62,15 @@ Notes
 `LanguageField` and `CountryField` fields are ready for South and
 internationalization, so you can already do things such as:
 
-    ./manage.py schemamigration <foo> --auto
+```bash
+./manage.py schemamigration <foo> --auto
+```
 
 or
 
-    django-admin.py makemessages -l <ll>_<CC>
+```bash
+django-admin.py makemessages -l <ll>_<CC>
+```
 
 No worries if you either don't use South [http://south.aeracode.org/] or
 don't know what that is, in that case feature won't be get on your way.
